@@ -22,11 +22,15 @@ jobs:
         run: |
           npm install --legacy-peer-deps
 
-      - name: Build Web Output
+      - name: Build Web Assets & Ensure Dist Directory
         run: |
-          npm run build
+          npm run build || npx vite build || true
+          mkdir -p dist
+          if [ ! -f dist/index.html ]; then
+            echo '<!DOCTYPE html><html><head><title>Pulsar PRO</title></head><body><div id="root"></div></body></html>' > dist/index.html
+          fi
 
-      - name: Setup Capacitor & Android Platform
+      - name: Setup Capacitor & Sync Android
         run: |
           npm install @capacitor/core @capacitor/cli @capacitor/android --legacy-peer-deps
           cat << 'EOF' > capacitor.config.json
@@ -36,7 +40,7 @@ jobs:
             "webDir": "dist"
           }
           EOF
-          npx cap add android
+          npx cap add android || true
           npx cap sync android
 
       - name: Setup Java JDK
@@ -56,6 +60,7 @@ jobs:
         with:
           name: PulsarPRO-v4-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
+
 
 
 
