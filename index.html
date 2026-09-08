@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pulsar CAD Pro v4.0 - UI Clone</title>
+    <style>
+      :root {
+        --bg-dark: #0f111a;
+        --panel-bg: #1a1d27;
+        --border-color: #2a2d3d;
+        --text-main: #ffffff;
+        --text-muted: #8b92a5;
+        --cyan: #00d2d3;
+        --orange: #ff9f43;
+        --green: #10ac84;
+        --purple: #5f27cd;
+        --grey-btn: #34495e;
+        --red-btn: #ee5253;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        user-select: none;
+      }
+
+      body {
+        background-color: var(--bg-dark);
+        color: var(--text-main);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      /* --- Top Navbar --- */
+      #top-bar {
+        height: 50px;
+        background-color: var(--panel-bg);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 15px;
+        z-index: 10;
+      }
+
+      .nav-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .btn {
+        background-color: var(--grey-btn);
+        color: white;
+        border: 1px solid var(--border-color);
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: opacity 0.2s;
+      }
+
+      .btn:hover {
+        opacity: 0.8;
+      }
+      .btn-cyan {
+        background-color: var(--cyan);
+        color: #000;
+        font-weight: bold;
+      }
+      .btn-orange {
+        background-color: var(--orange);
+        color: #000;
+        font-weight: bold;
+      }
+      .btn-green {
+        background-color: var(--green);
+      }
+      .btn-purple {
+        background-color: var(--purple);
+      }
+
+      .logo-area {
+        text-align: right;
+        line-height: 1.2;
+      }
+      .logo-title {
+        color: var(--cyan);
+        font-weight: bold;
+        font-size: 16px;
+        letter-spacing: 1px;
+      }
+      .logo-sub {
+        font-size: 10px;
+        color: var(--text-muted);
+      }
+
+      /* --- Main Layout --- */
+      #main-container {
+        display: flex;
+        flex: 1;
+        position: relative;
+      }
+
+      /* --- Left Sidebar --- */
+      #left-sidebar {
+        width: 80px;
+        background-color: var(--bg-dark);
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px 10px;
+        z-index: 10;
+      }
+
+      .tool-btn {
+        background-color: var(--grey-btn);
+        color: white;
+        border: 1px solid var(--border-color);
+        padding: 8px 0;
+        border-radius: 4px;
+        font-size: 11px;
+        cursor: pointer;
+        text-align: center;
+      }
+
+      .tool-wall {
+        border-left: 3px solid var(--cyan);
+      }
+      .tool-door {
+        border-left: 3px solid var(--orange);
+      }
+      .tool-window {
+        border-left: 3px solid #ccc;
+      }
+      .tool-cabinet {
+        background-color: var(--purple);
+      }
+      .tool-assets {
+        background-color: var(--orange);
+        color: #000;
+        font-weight: bold;
+      }
+
+      /* --- 3D Canvas Area --- */
+      #canvas-container {
+        flex: 1;
+        position: relative;
+        background: radial-gradient(circle, #2a2d3d 0%, #0f111a 100%);
+      }
+
+      /* --- Right Bottom Floating Controls --- */
+      #floating-controls {
+        position: absolute;
+        bottom: 30px;
+        right: 30px;
+        background-color: rgba(26, 29, 39, 0.8);
+        border: 1px solid var(--cyan);
+        border-radius: 12px;
+        padding: 15px;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+        backdrop-filter: blur(5px);
+      }
+
+      .float-btn {
+        background-color: var(--grey-btn);
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        font-size: 12px;
+        cursor: pointer;
+        text-align: center;
+      }
+      .float-btn-edit {
+        background-color: var(--orange);
+        color: black;
+        grid-column: span 3;
+        font-weight: bold;
+      }
+      .float-btn-cyan {
+        background-color: var(--cyan);
+        color: black;
+        grid-column: span 3;
+        font-weight: bold;
+      }
+      .float-btn-red {
+        background-color: var(--red-btn);
+      }
+
+      /* Top right stats bar */
+      #stats-bar {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 11px;
+        color: var(--text-muted);
+        direction: rtl;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Top Navigation Bar -->
+    <div id="top-bar">
+      <div class="nav-group">
+        <button class="btn">تصدير DXF 📥</button>
+        <button class="btn">استيراد DXF 📤</button>
+        <button class="btn btn-purple">English</button>
+        <button class="btn">فاتح ☀️</button>
+        <button class="btn">ملف</button>
+        <button class="btn btn-orange">JSON</button>
+        <button class="btn btn-orange">BOM</button>
+        <button class="btn btn-green">حفظ 💾</button>
+        <button class="btn">↩</button>
+        <button class="btn">↪</button>
+      </div>
+
+      <div class="nav-group">
+        <button class="btn">تعشيش CNC ✂️</button>
+        <button class="btn">مجسم 3D 🧊</button>
+        <button class="btn btn-cyan">رسم 2D 📏</button>
+        <div class="logo-area">
+          <div class="logo-title">
+            PULSAR
+            <span style="color: white; font-weight: normal; font-size: 12px">PRO v4.0</span>
+          </div>
+          <div class="logo-sub">PRECISION UNLEASHED • محرك الفنكس الهندسي</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div id="main-container">
+      <!-- Left Sidebar Tools -->
+      <div id="left-sidebar">
+        <button class="tool-btn tool-wall">Wall 🧱</button>
+        <button class="tool-btn tool-door">Door 🚪</button>
+        <button class="tool-btn tool-window">Window 🪟</button>
+        <button class="tool-btn tool-cabinet">Cabinet 🗄️</button>
+        <button class="tool-btn tool-assets">Assets ☷</button>
+      </div>
+
+      <!-- 3D Canvas -->
+      <div id="canvas-container">
+        <div id="stats-bar">العرض: cm | الدقة: 0 | الشبكة: 1 cm | الجدران: 5</div>
+
+        <!-- Floating Controls -->
+        <div id="floating-controls">
+          <button class="float-btn float-btn-edit">تحرير (Edit)</button>
+          <button class="float-btn">Undo ↩</button>
+          <button class="float-btn" style="border-radius: 50%; width: 35px; height: 35px; margin: 0 auto">
+            X
+          </button>
+          <button class="float-btn">Redo ↪</button>
+          <button class="float-btn">Pan</button>
+          <button class="float-btn float-btn-red">Trim</button>
+          <button class="float-btn">Zoom</button>
+          <button class="float-btn float-btn-cyan">جدار (Wall)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- OrbitControls -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script>
+      // Initialize Three.js Scene
+      const container = document.getElementById("canvas-container");
+      const scene = new THREE.Scene();
+
+      // Use Orthographic Camera to achieve the isometric look from the image
+      const aspect = container.clientWidth / container.clientHeight;
+      const d = 15;
+      const camera = new THREE.OrthographicCamera(
+        -d * aspect,
+        d * aspect,
+        d,
+        -d,
+        1,
+        1000,
+      );
+
+      // Position camera for Isometric View
+      camera.position.set(20, 20, 20);
+      camera.lookAt(scene.position);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.shadowMap.enabled = true;
+      container.appendChild(renderer.domElement);
+
+      const controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+      scene.add(ambientLight);
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.5);
+      dirLight.position.set(20, 30, 10);
+      dirLight.castShadow = true;
+      scene.add(dirLight);
+
+      // --- Build Mock Scene (Floor & Walls) ---
+
+      // Floor (Wood/Beige)
+      const floorGeo = new THREE.PlaneGeometry(20, 20);
+      const floorMat = new THREE.MeshStandardMaterial({
+        color: 0xdeb887,
+        roughness: 0.8,
+      });
+      const floor = new THREE.Mesh(floorGeo, floorMat);
+      floor.rotation.x = -Math.PI / 2;
+      floor.receiveShadow = true;
+      scene.add(floor);
+
+      // Wall Materials (Outer beige, Inner teal/white)
+      const wallMatInner = new THREE.MeshStandardMaterial({ color: 0xe0f7fa });
+      const wallMatOuter = new THREE.MeshStandardMaterial({ color: 0x34495e });
+      const wallMatTop = new THREE.MeshBasicMaterial({ color: 0x00d2d3 }); // Teal top edge like image
+
+      const materials = [
+        wallMatOuter,
+        wallMatInner,
+        wallMatTop,
+        wallMatOuter,
+        wallMatOuter,
+        wallMatOuter,
+      ];
+
+      // Back Wall
+      const wall1Geo = new THREE.BoxGeometry(20, 6, 1);
+      const wall1 = new THREE.Mesh(wall1Geo, materials);
+      wall1.position.set(0, 3, -9.5);
+      wall1.castShadow = true;
+      wall1.receiveShadow = true;
+      scene.add(wall1);
+
+      // Left Wall
+      const wall2Geo = new THREE.BoxGeometry(1, 6, 20);
+      const wall2 = new THREE.Mesh(wall2Geo, materials);
+      wall2.position.set(-9.5, 3, 0);
+      wall2.castShadow = true;
+      wall2.receiveShadow = true;
+      scene.add(wall2);
+
+      // --- Mock Furniture ---
+
+      // Cabinet 1 (Left)
+      const cab1 = new THREE.Mesh(
+        new THREE.BoxGeometry(3, 3, 8),
+        new THREE.MeshStandardMaterial({ color: 0x8d6e63 }),
+      );
+      cab1.position.set(-7.5, 1.5, -2);
+      cab1.castShadow = true;
+      scene.add(cab1);
+
+      // Cabinet 2 (Back)
+      const cab2 = new THREE.Mesh(
+        new THREE.BoxGeometry(10, 3, 3),
+        new THREE.MeshStandardMaterial({ color: 0x8d6e63 }),
+      );
+      cab2.position.set(0, 1.5, -7.5);
+      cab2.castShadow = true;
+      scene.add(cab2);
+
+      // Tall Cabinet
+      const tallCab = new THREE.Mesh(
+        new THREE.BoxGeometry(3, 6, 3),
+        new THREE.MeshStandardMaterial({ color: 0x8d6e63 }),
+      );
+      tallCab.position.set(6, 3, -7.5);
+      tallCab.castShadow = true;
+      scene.add(tallCab);
+
+      // Dining Table
+      const table = new THREE.Mesh(
+        new THREE.BoxGeometry(4, 0.2, 6),
+        new THREE.MeshStandardMaterial({ color: 0xf5f5f5 }),
+      );
+      table.position.set(3, 2, 3);
+      table.castShadow = true;
+      scene.add(table);
+
+      const legGeo = new THREE.CylinderGeometry(0.1, 0.1, 2);
+      const legMat = new THREE.MeshStandardMaterial({ color: 0x555555 });
+      const pos = [
+        [1.5, 1.5],
+        [-1.5, 1.5],
+        [1.5, -1.5],
+        [-1.5, -1.5],
+      ];
+      pos.forEach((p) => {
+        const leg = new THREE.Mesh(legGeo, legMat);
+        leg.position.set(3 + p[0], 1, 3 + p[1]);
+        scene.add(leg);
+      });
+
+      // Grid overlay
+      const grid = new THREE.GridHelper(20, 20, 0x00d2d3, 0x444444);
+      grid.position.y = 0.01;
+      scene.add(grid);
+
+      // Handle Resize
+      window.addEventListener("resize", () => {
+        const aspect = container.clientWidth / container.clientHeight;
+        camera.left = -d * aspect;
+        camera.right = d * aspect;
+        camera.top = d;
+        camera.bottom = -d;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+      });
+
+      // Animation Loop
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      }
+      animate();
+    </script>
+  </body>
+</html>
