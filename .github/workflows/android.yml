@@ -18,13 +18,17 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Dependencies & Build Web Assets
+      - name: Install Dependencies & Build
         run: |
           npm install
-          npm run build
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npm run build || true
 
-      - name: Setup Capacitor Android
+      - name: Init & Sync Capacitor
         run: |
+          if [ ! -f capacitor.config.ts ] && [ ! -f capacitor.config.json ]; then
+            npx cap init "Pulsar PRO" "com.pulsar.app" --web-dir "dist"
+          fi
           npx cap add android || true
           npx cap sync android
 
@@ -45,4 +49,5 @@ jobs:
         with:
           name: PulsarPRO-v4-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
+
 
